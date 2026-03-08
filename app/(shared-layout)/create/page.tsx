@@ -20,10 +20,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const CreateRoute = () => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const mutation = useMutation(api.post.createPost);
 
   const form = useForm({
@@ -35,9 +41,15 @@ const CreateRoute = () => {
   });
 
   function onSubmit(values: z.infer<typeof postSchema>) {
-    mutation({
-      body: values.content,
-      title: values.title,
+    startTransition(() => {
+      mutation({
+        body: values.content,
+        title: values.title,
+      });
+
+      toast.success("Everything was fine");
+
+      router.push("/");
     });
   }
 
@@ -96,7 +108,16 @@ const CreateRoute = () => {
                 )}
               />
 
-              <Button>Create Post</Button>
+              <Button disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <span>Create post</span>
+                )}
+              </Button>
             </FieldGroup>
           </form>
         </CardContent>
