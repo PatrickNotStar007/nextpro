@@ -43,7 +43,7 @@ const CreateRoute = () => {
 
   function onSubmit(values: z.infer<typeof postSchema>) {
     startTransition(async () => {
-      console.log("this runs on the client side");
+      console.log("This runs on the client side");
 
       await createBlogAction(values);
     });
