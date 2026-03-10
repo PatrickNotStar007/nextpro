@@ -37,10 +37,13 @@ const LoadBlogList = async () => {
         <Card key={post._id} className="pt-0">
           <div className="relative h-48 w-full overflow-hidden">
             <Image
-              src="https://static.vecteezy.com/system/resources/previews/007/233/800/non_2x/sea-beach-and-rocky-mountains-in-tropical-evening-photo.jpg"
+              src={
+                post.imageUrl ??
+                "https://static.vecteezy.com/system/resources/previews/007/233/800/non_2x/sea-beach-and-rocky-mountains-in-tropical-evening-photo.jpg"
+              }
               alt="image"
               fill
-              className="rounded-t-lg"
+              className="rounded-t-lg object-cover"
             />
           </div>
 

@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         port: "",
       },
+      {
+        hostname: "quiet-meerkat-277.eu-west-1.convex.cloud",
+        protocol: "https",
+        port: "",
+      },
     ],
   },
 };

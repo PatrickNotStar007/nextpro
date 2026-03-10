@@ -25,7 +25,6 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
 
 const CreateRoute = () => {
@@ -38,6 +37,7 @@ const CreateRoute = () => {
     defaultValues: {
       title: "",
       content: "",
+      image: undefined,
     },
   });
 
@@ -96,6 +96,29 @@ const CreateRoute = () => {
                       aria-invalid={fieldState.invalid}
                       placeholder="super cool blog content"
                       {...field}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="image"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel>Content</FieldLabel>
+                    <Input
+                      aria-invalid={fieldState.invalid}
+                      placeholder="super cool blog content"
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        field.onChange(file);
+                      }}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
