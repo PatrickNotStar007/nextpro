@@ -1,14 +1,12 @@
-"use client";
-
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { fetchQuery } from "convex/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-const BlogPage = () => {
-  const data = useQuery(api.post.getPosts);
+const BlogPage = async () => {
+  const data = await fetchQuery(api.post.getPosts);
 
   return (
     <div className="py-12">
