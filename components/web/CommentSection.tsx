@@ -1,22 +1,45 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { MessageSquare } from "lucide-react";
+import { Loader2, MessageSquare } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { commentSchema } from "@/app/schemas/comments";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { useParams } from "next/navigation";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import z from "zod";
+import { toast } from "sonner";
+import { useTransition } from "react";
 
 const CommentSection = () => {
+  const [isPending, startTransition] = useTransition();
+  const params = useParams<{ postId: Id<"posts"> }>();
+  const createComment = useMutation(api.comments.createComment);
+
   const form = useForm({
     resolver: zodResolver(commentSchema),
     defaultValues: {
       body: "",
-      postId: "",
+      postId: params.postId,
     },
   });
+
+  const onSubmit = (data: z.infer<typeof commentSchema>) => {
+    startTransition(async () => {
+      try {
+        await createComment(data);
+        form.reset();
+        toast.success("Comment posted");
+      } catch {
+        toast.error("Failed to create comment");
+      }
+    });
+  };
 
   return (
     <Card>
@@ -25,7 +48,7 @@ const CommentSection = () => {
         <h2 className="text-xl font-bold">5 Comments</h2>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
             name="body"
             control={form.control}
@@ -44,7 +67,16 @@ const CommentSection = () => {
             )}
           />
 
-          <Button>Submit</Button>
+          <Button disabled={isPending}>
+            {isPending ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                <span>Loading...</span>
+              </>
+            ) : (
+              <span>Submit</span>
+            )}
+          </Button>
         </form>
       </CardContent>
     </Card>
