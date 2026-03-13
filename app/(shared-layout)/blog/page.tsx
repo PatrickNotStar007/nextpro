@@ -3,12 +3,20 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
 export const dynamic = "force-static";
 export const revalidate = 30;
+
+export const metadata: Metadata = {
+  title: "Blog | Next.js 16 app",
+  description: "Read out latest articles and insights",
+  category: "Web development",
+  authors: [{ name: "Vasiliy Pupkin" }],
+};
 
 const BlogPage = () => {
   return (
