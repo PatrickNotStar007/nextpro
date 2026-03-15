@@ -74,7 +74,7 @@ const PostIdRoute = async ({ params }: PostIdRouteProps) => {
         Back to blog
       </Link>
 
-      <div className="relative w-full h-[400px] mb-8 rounded-xl overflow-hidden shadow-sm">
+      <div className="relative w-full h-100 mb-8 rounded-xl overflow-hidden shadow-sm">
         <Image
           src={
             post.imageUrl ??

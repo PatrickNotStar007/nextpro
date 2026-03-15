@@ -4,12 +4,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
+import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
-export const dynamic = "force-static";
-export const revalidate = 30;
+// export const dynamic = "force-static";
+// export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Blog | Next.js 16 app",
@@ -30,9 +32,9 @@ const BlogPage = () => {
         </p>
       </div>
 
-      <Suspense fallback={<SekeletonLoadingUi />}>
-        <LoadBlogList />
-      </Suspense>
+      {/* <Suspense fallback={<SekeletonLoadingUi />}> */}
+      <LoadBlogList />
+      {/* </Suspense> */}
     </div>
   );
 };
@@ -40,6 +42,9 @@ const BlogPage = () => {
 export default BlogPage;
 
 const LoadBlogList = async () => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("blog");
   const data = await fetchQuery(api.post.getPosts);
 
   return (
